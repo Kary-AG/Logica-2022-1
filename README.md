@@ -1,6 +1,9 @@
 <div align="center">
+ 
 # Logica-2021-2
+
 Favio Ezequiel Miranda Perea
+
 </div>
  
  ## Integrantes 

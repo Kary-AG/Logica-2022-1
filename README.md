@@ -8,7 +8,7 @@ Favio Ezequiel Miranda Perea
  
  ## Integrantes 
  
- - Shuc Chul Ui
+ - Shin Ui Chul
  - Azpeitia García Karyme Ivette
  - Sánchez Reza Neider
 

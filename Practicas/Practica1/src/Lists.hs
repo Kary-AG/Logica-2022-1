@@ -75,16 +75,23 @@ myMap f (Cons a x) = (Cons (f a) (myMap f x))
 
 -- Funcion que devuelve la intersección de dos listas.
 intersection :: (Eq a) => [a] -> [a] -> [a]
-intersection xs ys = [x | x<- xs, elem x ys]  
+intersection xs ys = [x | x<- xs, elem' x ys]
 
 -- Funcion que calcula la diferencia simétrica de dos listas.
 symetric :: (Eq a) => [a] -> [a] -> [a]
-symetric xs ys = [x | x <- xs++ys , elem x (intersection xs ys) == False]
+symetric xs ys = [x | x <- xs++ys , elem' x (intersection xs ys) == False]
 
 -- Función que devuelve el conjunto potencia de una lista.
 potencia :: Eq a => [a] -> [[a]]
 potencia [] = [[]]
 potencia (x:xs) = [(x:z) | z <-(potencia xs) ]++ potencia xs
+
+-- Función Auxiliar
+
+elem' e [] = False
+elem' e (x:xs)
+  | e == x = True
+  |otherwise = elem' e xs
 
 --------------------------------------------------------------------------------
 --------                             PRUEBAS                            --------

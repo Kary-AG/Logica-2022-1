@@ -75,7 +75,7 @@ myMap f (Cons a x) = (Cons (f a) (myMap f x))
 
 -- Funcion que devuelve la intersección de dos listas.
 intersection :: (Eq a) => [a] -> [a] -> [a]
-intersection xs ys = [x | x<- xs, elem x ys]  --Potemos usar elem (?)
+intersection xs ys = [x | x<- xs, elem x ys]  
 
 -- Funcion que calcula la diferencia simétrica de dos listas.
 symetric :: (Eq a) => [a] -> [a] -> [a]

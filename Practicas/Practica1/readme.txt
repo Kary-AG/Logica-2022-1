@@ -12,7 +12,7 @@ La práctica se realizo en equipo proponiendo ideas para mejorarla, se implement
 Dificultades para resolverla.
 
 Después del repaso sobre listas del lab no tuvimos muchas dificultades, solo crear la instancia de Eq se nos dificultó,
-pero despues de una canción del álbum mencionado y revisar un duda similiar en Stackoverflow se creó de la manera correcta.(creo)
+pero después de una canción del álbum mencionado y revisar un duda similiar en Stackoverflow se creó de la manera correcta.(creo)
 
 Consultas
 

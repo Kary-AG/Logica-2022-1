@@ -14,3 +14,4 @@ Favio Ezequiel Miranda Perea
 
 ## Prácticas
 
+- [Listas](https://github.com/mildewyPrawn/Logica/tree/master/Practicas/Practica1)

@@ -11,4 +11,8 @@ La práctica se realizo en equipo proponiendo ideas para mejorarla, se implement
 
 Dificultades para resolverla.
 
-Crear la instancia de Eq se nos dificultó, pero despues de una canción del álbum mencionado se creó de la manera correcta.
+Después del repaso sobre listas que se vio en lab no tuvimos muchas dificultades, solo crear la instancia de Eq se nos dificultó, pero despues de una canción del álbum mencionado y revisar un duda similiar en Stackoverflow se creó de la manera correcta.(creo)
+
+Consultas
+
+https://stackoverflow.com/questions/40695023/creating-instance-of-eq-for-custom-data-type-in-haskell

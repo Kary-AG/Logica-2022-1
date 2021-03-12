@@ -84,8 +84,7 @@ symetric xs ys = [x | x <- xs++ys , elem x (intersection xs ys) == False]
 -- Función que devuelve el conjunto potencia de una lista.
 potencia :: Eq a => [a] -> [[a]]
 potencia [] = [[]]
-potencia (x:xs) = [(x:z) | z <- cjt]++ cjt
-  where cjt     = potencia xs
+potencia (x:xs) = [(x:z) | z <- xs ]++ xs
 
 --------------------------------------------------------------------------------
 --------                             PRUEBAS                            --------

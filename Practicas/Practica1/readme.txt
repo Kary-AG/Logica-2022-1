@@ -7,7 +7,7 @@ Neider Sánchez Reza
 
 Desarrollo de la práctica.
 
-La práctica se realizo en equipo proponiendo ideas para mejorarla, se implemento escuchando el nuevo álbum de Selena Gomez.
+La práctica se realizo en equipo proponiendo ideas para mejorarla, se implemento escuchando el nuevo álbum de Selena Gomez "Revelación".
 
 Dificultades para resolverla.
 

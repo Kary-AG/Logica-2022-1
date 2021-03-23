@@ -7,11 +7,12 @@ Neider Sánchez Reza
 
 Desarrollo de la práctica.
 
-La práctica se realizo en equipo proponiendo ideas para mejorarla, se implemento escuchando el nuevo álbum de Selena Gomez "Revelación".
+La práctica se realizó en equipo proponiendo ideas para mejorarla, se implemento escuchando el nuevo álbum de Selena Gomez "Revelación".
 
 Dificultades para resolverla.
 
-Después del repaso sobre listas que se vio en lab no tuvimos muchas dificultades, solo crear la instancia de Eq se nos dificultó, pero despues de una canción del álbum mencionado y revisar un duda similiar en Stackoverflow se creó de la manera correcta.(creo)
+Después del repaso sobre listas del lab no tuvimos muchas dificultades, solo crear la instancia de Eq se nos dificultó,
+pero después de una canción del álbum mencionado y revisar un duda similiar en Stackoverflow se creó de la manera correcta.(creo)
 
 Consultas
 

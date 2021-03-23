@@ -23,6 +23,8 @@ instance (Show a) => Show (List a) where
 
 instance (Eq a) => Eq (List a) where
   (==) Void Void = True
+  (==) Void _    = False
+  (==) _ Void    = False
   (==) (Cons a b) (Cons a' b') = if  a == a' then and [b == b'] else False
 
 --------------------------------------------------------------------------------

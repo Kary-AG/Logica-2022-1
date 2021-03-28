@@ -45,7 +45,6 @@ myTail (Cons a b)   = Just b
 myConcat :: List a -> List a -> List a
 myConcat Void Void    = Void
 myConcat Void x       = x
-myConcat x Void       = x
 myConcat (Cons a x) x'= (Cons a (myConcat x x'))
 
 -- | Funcion que dado un elemento =e= y una lista =l=, regresa la
@@ -89,7 +88,7 @@ potencia [] = [[]]
 potencia (x:xs) = [(x:z) | z <-(potencia xs) ]++ potencia xs
 
 -- Función Auxiliar
-
+elem' :: Eq t => t -> [t] -> Bool
 elem' e [] = False
 elem' e (x:xs)
   | e == x = True

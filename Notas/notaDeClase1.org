@@ -1,0 +1,102 @@
+#+TITLE: Nota De Clase1
+* ¿Qué es la Lógica?
+
+- Habilidad determinar respuestas correctas
+- Estudio inferencía formal
+- Razonamiento
+** ¿Por qué estudiar lógica(computacional)?
+
+- *Es el cálculo de la computación*, un fundamento matemático para tratar información y razonar acerca del comportamiento de programas.
+- Muchos problemas computacionales imvolucran lógica en su represnetación o solución.
+- Es parte fundamental de los métodos formales.
+  + Los métodos formales son:
+    - ~especificar~
+      Notaciones formales como definiciones
+    - ~desarrollar~
+      Semántica operacional o axiomática
+    - ~verificar~
+      Demostrar propiedades
+
+* Argumentos Lógicos
+
+Una colección finita de afirmaciones(proposiciones) dividida en *premisas* y *conclusión*, estas susceptibles de recibir un valor de verdad.Un argumento lógico puede ser correcto o incorrecto.
+
+|Problema central de la lógica | verificar la correctud de un argumento lógico|
+
+** ¿Cómo decidir si un argumento es correcto?
+
+Usando la lógica como un medio, un argumento es correcto o válido si *suponiendo que sus premisas son ciertas, entonces necesariamente la conclusión también lo es.*
+
+** Características de un argumento lógico
+
+ - Los argumentos involucran *individuos*
+     + Los individuos tienen *propiedes*
+         + *Proposición* oración (habla de las prop. de los indiv) pueden clasificarse como *verdaderas* o *falsas*.
+             + Se clasifican como premisas y conclusión.
+ - Un argumento puede ser correcto(válido) o incorrecto(inválido) (NUnca es verdadero ni falso)
+
+* Sistema Lógicos
+
+Cualquier sistema lógico consta de al menos
+
+- *Sintaxis:* Lenguaje Formal.
+- *Semántica:* Mecanismo/Significado.
+- *Teoría de prueba:* Decide la correctud de un argumento lógico por medios puramente sintácticos.
+** Propiedades de SL
+- *Consistencia:* NO hay contradicciones.
+- *Correctud:* No puedes encontrar una inferencia falsa a partir de una verdad.
+- *Completud:* Todo lo verdadero es demostrable.
+
+* Lógica prposicional
+Sistema lógico más simple, se encarga del manejo de proposiciones mediante conectivos lógicos.
+
+| Proposición | un enunciado que puede calificarse como verdadero o falso | NO es Proposición ¿?, ¡! |
+
+** PROP
+Un lenguaje formal para la lógica de proposiciones. El alfabeto consta:
+- *Símbolos o variables proposicionales (# infinito):* p_1,p_2,p_3,...
+- *Constantes lógicas:* \top , \bot
+- *Conectivos lógicos:* \neg,\vee, \wedge, \rightarrow, \leftrightarrow
+- *Símbolos auxiliares:* (, )
+*** ATOM
+
+Conjutno de expresiones o fórmulas atómicas consta:
+- Varibles propisicionales p_1,p_2,...,p_n,..
+- Constantes \top, \bot
+
+Las expresiones que forman a *PROP* (fórmulas), se definen *recursivamente*:
+
+1. Si \varphi\in *ATOM* entonces \varphi\in *PROP*. Todo fórmula atómica es una fórmula.
+2. Si \varphi\in *PROP* entonces (\neg\varphi)\in *PROP*.
+3. Si \verphi ,\psi\in *PROP* entonces
+
+(\varphi\vee\psi),..\in *PROP*.
+4. Son todas. ~Garantiza el mínimo conjunto cerrado bajo las 3 reglas.~
+**** Bakus-Naur
+#+BEGIN_CENTER
+\varphi,\psi ::= VarP|\top|\bot|(\neg\varphi)|(\varphi\vee\psi)|(\varphi\wedge\psi)|(\varphi\rightarrow\psi)|(\varphi\leftrightarrow\psi)
+
+VarP::= p_1|p_2|...|p_n|...
+#+END_CENTER
+*** Precedencia y Asociatividad de OL
+
+| Operadores      | Descripción             | Asociatividad |
+|-----------------+-------------------------+---------------|
+| \vee, \wedge    | Conjunción y disyunción | izquierda     |
+| \rightarrow     | Implicación             | derecha       |
+| \leftrightarrow | bicondicional           | izquierda     |
+
+
+* Definición recursiva y Principio de Inducción
+
+Una definición recursiva consiste en definir propiedades o funciones de una estructira de datos mediante un análisis de casos. Para probar propiedades acerca de la estructura o funciones definidas recursivamente se usa el principio de inducción estructural para fórmulas.
++ Definición recursiva para la función ~np:~ *PROP*\rightarrow\mathbb{N}
+  #+BEGIN_CENTER
+  np(\varphi) = 0 si \varphi es atómica
+  np((\neg\varphi)) = np(\varphi)+2
+  np((\varphi\star\psi)) = np(\varphi)+np(\psi)+2
+  #+END_CENTER
+
+*Def.1* ~Principio de Inducción Estructural para~ *PROP*.
+
+Sea *P* una propiedad para las fórmulas de *PROP*

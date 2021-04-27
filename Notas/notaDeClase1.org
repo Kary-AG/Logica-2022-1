@@ -112,21 +112,27 @@ Sea *P* una propiedad para las fórmulas de *PROP*, para probar que \forall fór
 - Profundidad de una fórmula: /depth(\varphi)/ devuelve la profundidad o altura del árbol de análisis sintáctico de \varphi.
 #+BEGIN_CENTER
 /depth(\varphi)/ = 1 si \varphi es atómica
+
 /depth(\neg\varphi)/ = /depth(\varphi)/ +1
+
 /depth(\varphi\star\psi)/ = max (/depth(\varphi)/)(/depth(\psi)/) + 1|
 #+END_CENTER
 
 - Número de conectivos de una fórmula: /con(\varphi)/ devuelve el número de conectivos de \varphi.
   #+BEGIN_CENTER
   /con(\varphi)/ = 0 si \varphi es atómica
+
   /con(\neg\varphi)/ = 1 +/con(\varphi)/
+
   /con(\varphi\star\psi)/ = 1 + /con(\varphi)/ +/con(\psi)/
   #+END_CENTER
 
 - Variables de una fórmula:d /vars(\varphi)/ evuelve el conjunto o lista de variables que figuran en \varphi (sin repeticiones).
   #+BEGIN_CENTER
    /vars(\varphi)/ = \varphi si \varphi es atómica
+
    /vars(\neg\varphi)/ = /vars(\varphi)/
+
    /vars(\varphi\star\psi)/ = /vars(\varphi)/ si \varphi == \psi sino /vars(\varphi)/ + /vars(\psi)/
   #+END_CENTER
 
@@ -134,6 +140,8 @@ Sea *P* una propiedad para las fórmulas de *PROP*, para probar que \forall fór
 
   #+BEGIN_CENTER
    /atom(\varphi)/ = 1 si \varphi es atómica
+
    /atom(\neg\varphi)/ =  /atom(\varphi)/
+
    /atom(\varphi\star\psi)/ = /atom(\varphi)/ +  /atom(\psi)/
   #+END_CENTER

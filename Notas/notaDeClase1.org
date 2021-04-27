@@ -111,11 +111,11 @@ Sea *P* una propiedad para las fórmulas de *PROP*, para probar que \forall fór
 
 - Profundidad de una fórmula: /depth(\varphi)/ devuelve la profundidad o altura del árbol de análisis sintáctico de \varphi.
 #+BEGIN_CENTER
-/depth(\varphi)/ = 1 si \varphi es atómica
+/depth(\varphi)/ = 0 si \varphi es atómica
 
 /depth(\neg\varphi)/ = /depth(\varphi)/ +1
 
-/depth(\varphi\star\psi)/ = max (/depth(\varphi)/)(/depth(\psi)/) + 1|
+/depth(\varphi\star\psi)/ = max (/depth(\varphi)/)(/depth(\psi)/) + 1
 #+END_CENTER
 
 - Número de conectivos de una fórmula: /con(\varphi)/ devuelve el número de conectivos de \varphi.
@@ -145,3 +145,16 @@ Sea *P* una propiedad para las fórmulas de *PROP*, para probar que \forall fór
 
    /atom(\varphi\star\psi)/ = /atom(\varphi)/ +  /atom(\psi)/
   #+END_CENTER
+
+** Ejercicios inducción estructural
+- /con(\varphi)< 2**(/depth(\varphi)/)/
+
+  *Demostración.* Inducción sobre la fórmula \varphi
+
+  *Base de inducción:* Sea \varphi una fórmula atómica. Probaremos que se cumple para \varphi.
+
+  Es fácil verificar por como están definidas las funciones /con()/ y /depth()/ para una fórmula atómica. Por lo tanto
+
+  ~con(\varphi) = 0 < 1 =2**0= 2**(depth(\varphi))~
+
+  *Hipótesis de inducción:*

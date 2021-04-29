@@ -86,7 +86,6 @@ VarP::= p_1|p_2|...|p_n|...
 | \rightarrow     | Implicación             | derecha       |
 | \leftrightarrow | bicondicional           | izquierda     |
 
-
 * Definición recursiva y Principio de Inducción
 
 Una definición recursiva consiste en definir propiedades o funciones de una estructira de datos mediante un análisis de casos. Para probar propiedades acerca de la estructura o funciones definidas recursivamente se usa el principio de inducción estructural para fórmulas.
@@ -110,13 +109,13 @@ Sea *P* una propiedad para las fórmulas de *PROP*, para probar que \forall fór
 ** Ejercicios def. recursiva
 
 - Profundidad de una fórmula: /depth(\varphi)/ devuelve la profundidad o altura del árbol de análisis sintáctico de \varphi.
-#+BEGIN_CENTER
-/depth(\varphi)/ = 0 si \varphi es atómica
+  #+BEGIN_CENTER
+  /depth(\varphi)/ = 0 si \varphi es atómica
 
-/depth(\neg\varphi)/ = /depth(\varphi)/ +1
+  /depth(\neg\varphi)/ = /depth(\varphi)/ +1
 
-/depth(\varphi\star\psi)/ = max (/depth(\varphi)/)(/depth(\psi)/) + 1
-#+END_CENTER
+  /depth(\varphi\star\psi)/ = max (/depth(\varphi)/)(/depth(\psi)/) + 1
+  #+END_CENTER
 
 - Número de conectivos de una fórmula: /con(\varphi)/ devuelve el número de conectivos de \varphi.
   #+BEGIN_CENTER
@@ -155,6 +154,149 @@ Sea *P* una propiedad para las fórmulas de *PROP*, para probar que \forall fór
 
   Es fácil verificar por como están definidas las funciones /con()/ y /depth()/ para una fórmula atómica. Por lo tanto
 
-  ~con(\varphi) = 0 < 1 =2**0= 2**(depth(\varphi))~
+  con(\varphi) = 0 < 1 =2**0= 2**(depth(\varphi))
 
-  *Hipótesis de inducción:*
+  *Hipótesis de inducción:* Supongamos que
+
+   /con(\varphi)< 2**(/depth(\varphi)/)/  y  /con(\psi)< 2**(/depth(\psi)/)/
+
+   *Paso inductivo:* Probamos la propiedad para \neg\varphi y \varphi\star\psi
+
+   /con(\neg\varphi)/ = 1 + /con(varphi)/ por def. de /con()/
+
+
+  /con(\varphi\star\psi)/ = 1 + /con(\varphi)/ + /con(\psi)/
+
+-------------------------------------------- --
+
+ -  /depth(\varphi)\leq com(\varphi)/
+
+   *Demostración.* Inducción sobre la fórmula \varphi
+
+    *Base de inducción:* Sea \varphi una fórmula atómica. Probaremos que se cumple para \varphi.
+
+       Es fácil verificar por como están definidas las funciones /con()/ y /depth()/ para una fórmula atómica. Por lo tanto
+
+       /depth(\varphi)/= 0\leq 0 =/con(\varphi)/
+
+   *Hipótesis de inducción:* Supongamos que
+
+        /depth(\varphi)\leq con(\varphi)/ y /depth(\psi)\leq con(\psi)/
+
+   *Paso inductivo:* Probamos la propiedad para \neg\varphi y \varphi\star\psi
+
+      Para \neg\varphi :
+
+       Por definición de /depth/ tenemos
+
+         /depth(\neg\varphi)/ =  1 + depth(\varphi)
+
+       Por hipótesis de inducción tenemos  /depth(\varphi)\leq con(\varphi)/ sumando 1 de ambos lados de la desigualdad tenemos
+
+           1 + /depth(\varphi)\leq con(\varphi)/ +1
+
+       Por como está definida la función /con/ sabemos que /con(\varphi)/ +1/ = /con(\neg\varphi)/.
+
+       De lo anterior tenemos lo siguiente
+
+        /depth(\neg\varphi)/ =  1 + depth(\varphi) \leq  1 + /con(\varphi)/ = /con(\neg\varphi)/
+
+       Es decir  /depth(\neg\varphi)/ \leq /con(\neg\varphi)/
+
+       Por tanto se cumple la propiedad para \neg\varphi
+
+       Para  \varphi\star\psi
+
+       Por definición de /depth/ tenemos
+
+       depth(\varphi\star\psi) =  max (depth(\varphi))(depth(\psi))+ 1
+
+       /Obs/. El número de conectivos lógicos de una fórmula siempre será mayor igual a 0.
+
+       De donde tenemos dos casos
+
+       *Caso 1:* Si /max (depth(\varphi))(depth(\psi))/ = /depth(\varphi)/+1
+
+       Por *hipótesis de inducción* y sumando 1 a la desigualdad tenemos
+
+       /depth(\varphi)/+1\leq /con(\varphi)/ +1
+
+       Ahora, por /Obs/ sabemos que  /con(\varphi)/ +1 \leq /con(\varphi)/ + /con(\psi)/ +1 es decir
+
+       /depth(\varphi)/+1\leq /con(\varphi)/ +1 \leq /con(\varphi)/ + /con(\psi) / +1
+
+       Por transitividad
+
+       /depth(\varphi)/+1\leq /con(\varphi)/ + /con(\psi) / +1
+
+       Y como  /max (depth(\varphi))(depth(\psi))/ = /depth(\varphi)/+1 entonces
+
+       /max (depth(\varphi))(depth(\psi))/ \leq   /con(\varphi)/ + /con(\psi) / +1
+
+       Por tanto se cumple la propiedad.
+
+       *Caso 2:*   Si /max (depth(\varphi))(depth(\psi))/ = /depth(\varphi)/+1
+
+       Análogo al *Caso 1*
+
+- /atom(\varphi)\leq 2con(\varphi)/ +1
+
+  *Demostración:* Inducción sobre \varphi
+
+  *Base de inducción:* Sea \varphi una fórmula atómica. Probaremos que se cumple para \varphi.
+
+        Es fácil verificar por como están definidas las funciones /con()/ y /atom()/ para una fórmula atómica. Por lo tanto
+
+       /depth(\varphi)/= 1\leq 1 =2(0)+1=/con(\varphi)/
+
+  *Hipótesis de inducción:* Supongamos que
+
+        /atom(\varphi)\leq  2con(\varphi)/ +1 y   /atom(\psi)\leq 2con(\psi)/ +1
+
+  *Paso inductivo:* Probamos la propiedad para \neg\varphi y \varphi\star\psi
+
+        Para \neg\varphi
+
+        Por definición de /atom()/ tenemos
+
+        /atom(\neg\varphi)/ = /atom(\varphi)/
+
+        Por *hipótesis de inducción*
+
+         /atom(\neg\varphi)/ = /atom(\varphi)/\leq /2 con(\varphi)/+1
+
+        Por lo tanto se cumple la propiedad.
+
+        Para \varphi\star\psi
+
+        Por como esta definida /atom()/ tenemos
+
+       atom(\varphi\star\psi) = atom(\varphi) + atom(\psi)
+
+        /Obs/. Si a<= c y b<=d entonces a+b <= c+d (?)
+
+        Por /Obs/ tenemos
+
+        atom(\varphi) + atom(\psi)\leq (2con(\varphi)/ +1) + (2con(\psi)/ +1)
+
+        Resolvemos el lado izquierdo de la desigualdad
+
+         /(2con(\varphi)/ +1) + (2con(\psi)/ +1)/ = /2con(\varphi) + 2con(\psi) +2
+
+        Factorizamos 2
+
+         /2con(\varphi) + 2con(\psi) +2 = 2 (/con(\varphi) + con(\psi)/ +1)
+
+        Por definición de /con()/ tenemos
+
+         2(/con(\varphi) + con(\psi)/ +1) = 2(/con(\varphi\star\psi)/)
+
+        Por tanto
+
+         atom(\varphi\star\psi) =  2(/con(\varphi\star\psi)/)
+
+         Por tanto se cumple la propiedad.
+
+* Sustitución
+
+Una operación sintáctica fundamental de las fórmulas proposicionales.

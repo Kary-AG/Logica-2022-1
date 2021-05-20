@@ -1,0 +1,49 @@
+#+TITLE:Boletin de Ejercicios 1
+
+* Sintaxis de la Lógica Proposicional
+
+1. Definición recuersiva
+
+   En los siguientes ejercicios \star\in {\rightarrow,\wedge,\vee,\leftrightarrow}
+
+   a) ~grado:~ recibe una fórmula lógica y regresa el número de conectivos lógicos que tiene.
+
+      ~grado(\phi)~ = 0 si \phi es atómica
+      ~grado(\neg\phi)~ = 1 + ~grado(\phi)~
+      ~grado((\phi\star\psi))~ = ~grado(\phi)~ + ~grado(\psi)~ +1
+
+   b) ~atom:~ recibe una fórmula y regresa el conjunto de subfórmulas atómicas.
+
+      ~atom(\phi)~ = [\phi] si \phi es atómica
+      ~atom((\neg\phi))~ = ~atom(\phi)~
+      ~atom((\phi\star\psi))~ = ~atom(\phi)~ ++ ~atom(\psi)~
+
+   c) ~sub:~ Recibe una fórmula y regresa el conjunto de todas sus subfórmulas.
+
+      ~sub(\phi)~ = [\phi] si es atómica
+      ~sub(\neg\phi)~ = [\neg\phi] ++ ~sub(\phi)~
+      ~sub((\phi\star\psi))~ = [\phi\star\psi] ++sub(\phi)  ++sub(\psi)
+
+   d) ~eln:~ recibe una fórmula φ y regresa la fórmula que resulta de reemplazar en φ cada subfórmula de la forma ¬ψ por ψ → ⊥
+
+      ~eln(\phi)~ = \phi si es atómica
+      ~eln(\neg\phi)~ = ~eln(\phi)~ \rightarrow \bot
+      ~eln(\phi\star\psi)~ = ~eln(\phi)~\star ~eln(\psi)~
+
+  2. Elimina los paréntesis innecesarios
+
+    a) ((p ∨ q) → r) ↔((¬r) → (¬(p ∨ q))
+
+        (p ∨ q → r) ↔ (¬r → ¬(p ∨ q))
+
+    b) ¬(((p ∧ (p → (¬q))) ∧ q) ∧ p)
+
+       \neg(p\wedge (p\rightarrow\neg q)\wedge q\wedge p)
+
+    c) (p → (q ∧ (¬q))) → ((¬p) → p)
+
+       (p\rightarrow q \wedge\neg q)\rightarrow (\neg p\rightarrow p)
+
+    d) (¬s) → ((¬t) ∧ ¬(p ∨ q))
+
+       \neg s\rightarrow \neg t\wedge \neg (p\vee q)

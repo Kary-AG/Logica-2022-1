@@ -1,0 +1,60 @@
+#+TITLE: Nota De Clase 2
+
+* Significado de los conectivos lógicos
+
+- La negación
+
+  + \neg\phi
+
+  + No, no es cierto que, es falso que, etc.
+- La Disyunción
+
+  + \varphi\lor\phi
+
+  + o
+
+  + Verdadera cuando al menos una fórmula lo es.
+- La Conjunción
+
+  + \varphi\wedge\psi
+
+  + y, pero
+
+  + Verdadera, cuando ambas lo son.
+- La implicación
+
+  + \varphi\longrightarrow\psi
+
+  + si \varphi entonces \psi, \psi si \varphi, \varphi solo si \psi,\varphi es condición necesaria para \psi.
+
+  + Falsa solo cuando el antecedente es 1 y el consecuente es 0.
+- La equivalencia
+
+  + \varphi\leftrightarrow\psi
+
+  + \varphi es equivalente a \psi, \varphi si y solo si \psi, \varphi es condición necesaria y suficiente para \psi.
+
+  +  Verdadera cuando, ambas 1 o 0
+
+
+* Semántica formal de los conectivos lógicos
+
+*Def.1*
+
+El tipo de valores booleanos *Bool* se define como *Bool*=\{0,1}\
+
+*Def.2*
+
+Un estado o asignación de las variables es una función
+
+\mathcal{I}: VarP\rightarrow Bool (*)
+
+/Obs/ Dadas /n/ variables proposicionales existen 2**n  estados distintos pra esa variable.
+
+*Def.3*
+
+ Dado un estado de las variables (*), definimos la interpretación de las formulas con respecto a \mathcal{I} como la función \mathcal{I}^*:PROP\rightarrow Bool
+
+A few years ago I lived in Tokio and I was able to pick up Japanese, but now I need to brush up my Spanish, yet Iĺl back to Mexico I'll be able to get by.
+
+Recently some people tell me that I pass for a local Japanese, but I think almost my japanese is good, but when i talk with a natives it hard to take the languages in .

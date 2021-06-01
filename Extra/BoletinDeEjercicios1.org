@@ -47,3 +47,5 @@
     d) (¬s) → ((¬t) ∧ ¬(p ∨ q))
 
        \neg s\rightarrow \neg t\wedge \neg (p\vee q)
+
+3. Demuestra que para cualquier fórmula proposicional φ, el número de paréntesis izquierdos es igual al número de símbolos de disyunción en φ si la gramática para fórmulas proposicionales es la siguiente:

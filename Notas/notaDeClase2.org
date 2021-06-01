@@ -55,6 +55,3 @@ Un estado o asignación de las variables es una función
 
  Dado un estado de las variables (*), definimos la interpretación de las formulas con respecto a \mathcal{I} como la función \mathcal{I}^*:PROP\rightarrow Bool
 
-A few years ago I lived in Tokio and I was able to pick up Japanese, but now I need to brush up my Spanish, yet Iĺl back to Mexico I'll be able to get by.
-
-Recently some people tell me that I pass for a local Japanese, but I think almost my japanese is good, but when i talk with a natives it hard to take the languages in .

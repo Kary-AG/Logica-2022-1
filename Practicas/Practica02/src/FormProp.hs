@@ -52,15 +52,20 @@ vars (Syss p1 p2) = nub$vars p1 ++ vars p2
 interp :: Estado -> Prop -> Bool
 interp [] (Var x)    = False
 interp xs (Var x)    = elem x xs
+-- aqui podria simplemente ser "Not (interp xs x)", no?
 interp xs (Neg x)    = if (interp xs x) == True then False else True
+-- yo aqui habria puesto solo "interp i p && interp i q" :O
 interp xs (Conj p q) = if (interp xs p) == True && (interp xs q) == True then True else False
 interp xs (Disy p q) = if (interp xs p) ==  True || (interp xs q) == True then True else False
 interp xs (Impl p q) = if (interp xs p) == True && (interp xs q) == False then False else True
+-- segun yo se podria omitir por completo el if :O
 interp xs (Syss p q) = if (interp xs p) == (interp xs q) then True else False
 
 -- Función que cuenta el número de conectivos.
 numConectivos :: Prop -> Int
 numConectivos (Var p)    = 0
+-- Segun yo debe contar tambien los conectivos de p. D:
+-- numConectivos (Neg p) = 1 + numConectivos p
 numConectivos (Neg p)    = 1
 numConectivos (Conj p q) = 1 + numConectivos p + numConectivos q
 numConectivos (Disy p q) = 1 + numConectivos p + numConectivos q
@@ -70,6 +75,8 @@ numConectivos (Syss p q) = 1 + numConectivos p + numConectivos q
 -- Funcion que elimina las equivalencias (<->).
 elimEquiv :: Prop -> Prop
 elimEquiv (Var p)    = Var p
+-- Igual aqui deberia quitar posibles equivalencias de p y q, no? :o
+-- elimEquiv (Syss p q) = Conj (Impl (elimEquiv p) (elimEquiv q)) (Impl (elimEquiv q) (elimEquiv p))
 elimEquiv (Syss p q) = Conj (Impl p q)(Impl p q)
 elimEquiv (Neg p)    = Neg$ elimEquiv p
 elimEquiv (Conj p q) = Conj (elimEquiv p) (elimEquiv q)
@@ -80,6 +87,8 @@ elimEquiv (Impl p q) = Impl (elimEquiv p) (elimEquiv q)
 -- equivalencias.
 elimImpl :: Prop -> Prop
 elimImpl (Var x)    = Var x
+-- segun yo igual deberia quitar las implicaciones de p y q :O
+-- elimImpl (Impl p q) = Disy (Neg (elimImpl p)) (elimImpl q)
 elimImpl (Impl p q) = Disy (Neg p) q
 elimImpl (Neg p)    = Neg$ elimImpl p
 elimImpl (Conj p q) = Conj (elimImpl p)(elimImpl q)
@@ -93,7 +102,7 @@ estados phi = subconj$ vars phi
 
 -- Funcion que nos da TODOS los modelos de una proposicion.
 modelos :: Prop -> [Estado]
-modelos phi = [i | i<-(estados phi), interp i phi == True]
+modelos phi = [i | i<-(estados phi), interp i phi == True] -- el "== True" se puede quitar xd
 
 -- Funcion que nos dice si una proposicion es una tautologia.
 tautologia :: Prop -> Bool
@@ -102,6 +111,7 @@ tautologia phi = estados phi == modelos phi
 -- Función que nos dice si una proposición es satisfacible en una
 -- interpretación.
 satisfen :: Estado -> Prop -> Bool
+-- Segun esto se puede simplificar a "satisfen = interp" :OO
 satisfen i phi = interp i phi == True
 
 -- Funcion que nos dice si una proposicion es satifacible.
@@ -120,13 +130,22 @@ contrad phi = modelos phi == []
 -- Función que regresa una fórmula equivalente donde las negaciones
 -- solo se aplican a fórmulas atómicas.
 meteNegacion :: Prop -> Prop --(?)
+-- Yo creo que esos casos si son necesarios jaja
 meteNegacion (Var p)         = (Var p) --(*)
 meteNegacion (Neg(Var p))    = Neg (Var p) --(*)
 meteNegacion (Neg(Neg p))    = meteNegacion p
 meteNegacion (Neg(Conj p q)) = Disy (meteNegacion (Neg p)) (meteNegacion (Neg q))
+-- aqui tambien se deben negar p y q, no?
+-- meteNegacion(Neg(Disy p q)) = Conj (meteNegacion (Neg p)) (meteNegacion (Neg q))
 meteNegacion (Neg(Disy p q)) = Conj (meteNegacion p)(meteNegacion q)
 meteNegacion (Neg(Impl p q ))= Conj (meteNegacion p) (meteNegacion (Neg q))
 meteNegacion (Neg(Syss p q)) = Disy (Conj (meteNegacion p) (meteNegacion (Neg q)))(Conj (meteNegacion q) (meteNegacion (Neg p)))
+{- Al parecer faltan todavía los casos simples, sin los Neg:
+meteNegacion (Conj phi psi) = Conj (meteNegacion phi) (meteNegacion psi)
+meteNegacion (Disy phi psi) = Disy (meteNegacion phi) (meteNegacion psi)
+meteNegacion (Impl phi psi) = Impl (meteNegacion phi) (meteNegacion psi)
+meteNegacion (Syss phi psi) = Syss (meteNegacion phi) (meteNegacion psi)
+-}
 
 -- Función que regresa una fórmula equivalente donde las disyunciones
 -- sólo se aplica a disyunciones o literales.

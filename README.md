@@ -1,6 +1,6 @@
 <div align="center">
  
-# Logica-2021-2
+# Logica-2022-1
 
 Favio Ezequiel Miranda Perea
 
@@ -14,4 +14,4 @@ Favio Ezequiel Miranda Perea
 
 ## Prácticas
 
-- [Listas](https://github.com/Kary-AG/Logica-2021-2/tree/main/Practicas/Practica1)
+- [Introducción a Haskell]()

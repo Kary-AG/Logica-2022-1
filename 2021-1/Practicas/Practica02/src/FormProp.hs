@@ -21,7 +21,7 @@ data Prop = Var VarP
 instance Show Prop where
   show (Var p)      = p
   show (Neg p)      = "(¬)"++ show p
-  show (Conj p1 p2) = "("  ++ show p1 ++ "(/)" ++ show p2 ++ ")"
+  show (Conj p1 p2) = "("  ++ show p1 ++ "(/\\)" ++ show p2 ++ ")"
   show (Disy p1 p2) = "("  ++ show p1 ++ "(v)" ++ show p2 ++ ")"
   show (Impl p1 p2) = "("  ++ show p1 ++ "(-->)" ++ show p2 ++ ")"
   show (Syss p1 p2) = "("  ++ show p1 ++ "(<-->)"++ show p2 ++ ")"
@@ -121,23 +121,43 @@ contrad phi = modelos phi == []
 -- Función que regresa una fórmula equivalente donde las negaciones
 -- solo se aplican a fórmulas atómicas.
 meteNegacion :: Prop -> Prop
-meteNegacion (Var p)         = (Var p)
+meteNegacion (Var p)         = Var p
 meteNegacion (Neg(Var p))    = Neg (Var p)
-meteNegacion (Neg(Neg p))    = meteNegacion p
+meteNegacion (Neg(Neg p))    =  meteNegacion p
 meteNegacion (Neg(Conj p q)) = Disy (meteNegacion (Neg p)) (meteNegacion (Neg q))
 meteNegacion (Neg(Disy p q)) = Conj (meteNegacion (Neg p)) (meteNegacion (Neg q))
 meteNegacion (Neg(Impl p q ))= Conj (meteNegacion p) (meteNegacion (Neg q))
 meteNegacion (Neg(Syss p q)) = Disy (Conj (meteNegacion p) (meteNegacion (Neg q)))(Conj (meteNegacion q) (meteNegacion (Neg p)))
-meteNegacion (Conj phi psi) = Conj (meteNegacion phi) (meteNegacion psi)
-meteNegacion (Disy phi psi) = Disy (meteNegacion phi) (meteNegacion psi)
-meteNegacion (Impl phi psi) = Impl (meteNegacion phi) (meteNegacion psi)
-meteNegacion (Syss phi psi) = Syss (meteNegacion phi) (meteNegacion psi)
+meteNegacion (Conj p q)  = Conj (meteNegacion p) (meteNegacion q)
+meteNegacion (Disy p q)  = Disy (meteNegacion p) (meteNegacion q)
+meteNegacion (Impl p q)  = Impl (meteNegacion p) (meteNegacion q)
+meteNegacion (Syss p q)  = Syss (meteNegacion p) (meteNegacion q)
 
 -- Función que regresa una fórmula equivalente donde las disyunciones
 -- sólo se aplica a disyunciones o literales.
 -- Puedes suponer que la fórmula que recibes está en FNN.
 interiorizaDisyuncion :: Prop -> Prop
-interiorizaDisyuncion = error "D:"
+interiorizaDisyuncion (Var p)                = Var p
+interiorizaDisyuncion (Neg p)                = Neg (interiorizaDisyuncion p)
+interiorizaDisyuncion (Disy p (Conj q r))    = Conj (Disy p q) (Disy p r)
+interiorizaDisyuncion (Disy (Conj p q) r )   = Conj (Disy p r) (Disy q r)
+interiorizaDisyuncion (Disy (Var p) (Var q)) = Disy (Var p) (Var q)
+interiorizaDisyuncion (Disy (Var p) q)       =  interiorizaDisyuncion(Disy (Var p) (interiorizaDisyuncion q))
+interiorizaDisyuncion (Disy (Neg p) (Var q)) =  interiorizaDisyuncion (Disy (interiorizaDisyuncion (Neg p)) (Var q))
+interiorizaDisyuncion (Disy (Disy p q) (Var r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Disy p q)) (Var r))
+interiorizaDisyuncion (Disy (Impl p q) (Var r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Impl p q)) (Var r))
+interiorizaDisyuncion (Disy (Syss p q) (Var r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Syss p q)) (Var r))
+interiorizaDisyuncion (Disy (Neg p) (Neg q))    =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Neg p)) (interiorizaDisyuncion (Neg q)))
+interiorizaDisyuncion (Disy (Disy p q) (Neg r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Disy p q)) (interiorizaDisyuncion r))
+interiorizaDisyuncion (Disy (Impl p q) (Neg r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Impl p q)) (interiorizaDisyuncion (Neg r)))
+interiorizaDisyuncion (Disy (Syss p q) (Neg r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Syss p q)) (interiorizaDisyuncion (Neg r)))
+interiorizaDisyuncion (Disy (Neg p ) (Disy q r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Neg p)) (interiorizaDisyuncion (Disy q r)))
+interiorizaDisyuncion (Disy (Disy p q) (Disy r s)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Disy p q)) (interiorizaDisyuncion (Disy r s)))
+interiorizaDisyuncion (Disy (Impl p q) (Disy r s)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Impl p q)) (interiorizaDisyuncion (Disy r s)))
+interiorizaDisyuncion (Disy (Syss p q) (Disy r s)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Syss p q)) (interiorizaDisyuncion (Disy r s)))
+interiorizaDisyuncion (Disy (Neg p) (Impl q r)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Neg p)) (interiorizaDisyuncion (Impl p r)))
+interiorizaDisyuncion (Disy (Disy p q) (Impl r s)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Disy p q)) (interiorizaDisyuncion (Impl r s)))
+interiorizaDisyuncion (Disy (Impl p q) (Impl r s)) =  interiorizaDisyuncion(Disy (interiorizaDisyuncion (Impl p q)) (interiorizaDisyuncion (Impl r s)))
 
 -- Función que regresa una fórmula equivalente donde las conjunciones
 -- sólo se aplica a conjunciones o literales.
@@ -250,10 +270,10 @@ meteNegacion2 = meteNegacion (Neg ((Var "P") /\ (Var "Q")))
 meteNegacion21 = meteNegacion (Neg (Conj (Var "P") (Var "Q")))
 -- Regresa(n): (¬ "P" ∨ ¬ "Q")
 
---interiorizaDisyuncion1 = interiorizaDisyuncion (Disy (Var "P") (Conj (Var "Q") (Var "R")))
+interiorizaDisyuncion1 = interiorizaDisyuncion (Disy (Var "P") (Conj (Var "Q") (Var "R")))
 -- Regresa: (("P" ∨ "Q") ^ ("P" ∨ "R"))
 
---interiorizaDisyuncion2 = interiorizaDisyuncion (Disy (Conj (Var "P") (Var "Q")) (Var "R"))
+interiorizaDisyuncion2 = interiorizaDisyuncion (Disy (Conj (Var "P") (Var "Q")) (Var "R"))
 -- Regresa: (("P" ∨ "R") ^ ("Q" ∨ "R"))
 
 --interiorizaConjuncion1 = interiorizaConjuncion (Conj (Var "P") (Disy (Var "Q") (Var "R")))

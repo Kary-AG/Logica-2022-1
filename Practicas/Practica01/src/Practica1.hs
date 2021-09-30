@@ -33,8 +33,8 @@ suma :: Binario -> Binario -> Binario
 suma U U                 = Cero U
 suma U (Cero a)          = Uno a
 suma (Cero a)  U         = Uno a
-suma U (Uno a)           = Cero (suma (suma U U) a)
-suma (Uno a) U           = Cero (suma (suma U U) a)
+suma U (Uno a)           = Cero (suma U a)
+suma (Uno a) U           = Cero (suma U a)
 suma (Cero a) (Cero a')  = Cero (suma a a')
 suma (Uno a) (Uno a')    = Cero (suma (suma U a) a')
 suma (Uno a) (Cero a')   = Uno  (suma a a')
@@ -43,7 +43,7 @@ suma (Cero a) (Uno a')   = Uno  (suma a a')
 -- |4| producto. Regresa el producto de 2 numeros Binarios
 -- -> Ejemplo producto de (Cero U) (Cero U) = (Cero (Cero U)) , producto de 10 con 10 es 100
 producto :: Binario -> Binario -> Binario
-producto = error "D:"
+producto n  n' = natABin((binANat n) * (binANat n'))
 
 -- |5| natBinLista. Regresa el la representacion en Binario de un numero Decimal en forma de Lista
 -- -> ejemplo natBinLista 8 = [1,0,0,0]
@@ -57,8 +57,9 @@ sumaBinLista :: [Int] -> [Int] -> Binario
 sumaBinLista  xs ys = suma (binLBin xs) (binLBin ys)
 
 
-{--FUNCIONES EXTRA--}
+{--FUNCIONES AUX--}
 -- binLBin. Regresa la representación en Binario
+binLBin:: [Int]-> Binario
 binLBin [1]        = U
 binLBin xs
     | last xs == 0 = Cero (binLBin(init xs))
@@ -73,17 +74,73 @@ binLbin (Uno a) = binLbin a ++ [1]
 --binInt:: Regresa el binario en su representación decimal
 
 binInt:: [Int]->Int
-binInt = foldr (\x y -> x+ 2*y) 0
+binInt = foldl (\x y -> 2*x+ y) 0
 {-- PUNTOS EXTRA --}
 
 -- |1| natABin: Recibe un natural (mayor que 1) y devuelve un binario
 natABin :: Int -> Binario
+natABin 0 = error "Solo numeros mayores que 0"
 natABin n = binLBin(natBinLista n)
 
 -- |2| binANat: Recibe un binario y devuelve su reprentacion en numero natural (mayor que 1).
 binANat :: Binario -> Int
-binANat  U = 1
+binANat  b = binInt(binLbin b)
 
 -- |3| predecesor: Recibe un binario y devuelve su binario anterior
 predecesor :: Binario -> Binario
-predecesor = error "Impleme
+predecesor U = U
+predecesor n =  natABin((binANat n) - 1)
+
+{--Ejemplos--}
+
+b   = Uno (Cero U)
+b'  = Cero (Uno U)
+b'' = Cero(Uno(Cero U))
+
+s1 = sucesor (Cero U)
+-- 11
+s2 = sucesor (Uno U)
+--100
+s3 = sucesor (Cero (Uno U))
+--111
+sm1 =suma (Cero U) (Uno U)
+--101
+sm2 =suma (Uno U) (Uno U)
+--110
+sm3 =suma (Cero (Uno U)) (Uno (Cero U))
+
+p1 = producto U U
+--1
+p2 = producto (Uno U) (Uno U)
+--1001
+p3 = producto (Cero U) (Cero U)
+--100
+n1 =natBinLista 16
+--[1,0,0,0,0]
+n2=natBinLista 100
+--[1,1,0,0,1,0,0]
+n3 =natBinLista 29
+--[1,1,1,0,1]
+
+sb1=sumaBinLista [1,0,1] [1,0]
+--111
+sb2=sumaBinLista [1,0] [1,1,1,0]
+--10000
+sb3=sumaBinLista [1,1,1] [1,0,1,0]
+--10001
+sb4= sumaBinLista [1,0,1] [1,1,1,1]
+--10100
+nA1=natABin 21
+--10101
+nA2 =natABin 0
+--Exception: Solo numeros mayores que 0
+bA1=binANat (Uno (Uno (Cero U)))
+--11
+bA2 =binANat (Uno (Cero (Uno (Cero U))))
+--21
+pc1 =predecesor U
+--1
+pc2 = predecesor (Cero U)
+--1
+pc3 =predecesor (Uno U)
+--10

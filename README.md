@@ -14,4 +14,4 @@ Favio Ezequiel Miranda Perea
 
 ## Prácticas
 
-- [Introducción a Haskell]()
+- [Introducción a Haskell](https://github.com/Kary-AG/Logica-2022-1/tree/main/Practicas/Practica01)

@@ -30,7 +30,9 @@ sucesor (Uno a)  = Cero(sucesor a)
 -- |3| suma. Regresa la suma de 2 numeros de un Binarios
 -- -> ejemplo suma de U U = Cero U , suma de 1 y 1 es 10
 suma :: Binario -> Binario -> Binario
-suma U U                 = Cero U
+suma n n' = natABin((binANat n)+(binANat n'))
+
+  {-suma U U                 = Cero U
 suma U (Cero a)          = Uno a
 suma (Cero a)  U         = Uno a
 suma U (Uno a)           = Cero (suma U a)
@@ -39,7 +41,7 @@ suma (Cero a) (Cero a')  = Cero (suma a a')
 suma (Uno a) (Uno a')    = Cero (suma (suma U a) a')
 suma (Uno a) (Cero a')   = Uno  (suma a a')
 suma (Cero a) (Uno a')   = Uno  (suma a a')
-
+-}
 -- |4| producto. Regresa el producto de 2 numeros Binarios
 -- -> Ejemplo producto de (Cero U) (Cero U) = (Cero (Cero U)) , producto de 10 con 10 es 100
 producto :: Binario -> Binario -> Binario
@@ -74,7 +76,12 @@ binLbin (Uno a) = binLbin a ++ [1]
 --binInt:: Regresa el binario en su representación decimal
 
 binInt:: [Int]->Int
-binInt = foldl (\x y -> 2*x+ y) 0
+binInt xs = foldlk (\x y -> 2*x+ y) 0 xs
+
+-- foldl' Implementación de la función predefinida en Haskell
+foldlk f z []     = z
+foldlk f z (x:xs) = let z' = z `f` x
+                    in foldlk f z' xs
 {-- PUNTOS EXTRA --}
 
 -- |1| natABin: Recibe un natural (mayor que 1) y devuelve un binario

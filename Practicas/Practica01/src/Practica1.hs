@@ -37,6 +37,7 @@ sucesor (Uno a)  = Cero (sucesor a)
 -- -> Ejemplo suma de U U = Cero U, suma de 1 y 1 es 10.
 suma :: Binario -> Binario -> Binario
 suma n n' = natABin((binANat n) + (binANat n'))
+
 {- Otro intento con todos los casos:
 suma U U                 = Cero U
 suma U (Cero a)          = Uno a
@@ -72,9 +73,8 @@ sumaBinLista xs ys = suma (binLBin xs) (binLBin ys)
 binLBin :: [Int] -> Binario
 binLBin [1]        = U
 binLBin xs
-    -- Hay que implementar las funciones init y last. D:
-    | last xs == 0 = Cero (binLBin(init xs))
-    | otherwise    = Uno (binLBin(init xs))
+    | last' xs == 0 = Cero (binLBin(init' xs))
+    | otherwise    = Uno (binLBin(init' xs))
 
 -- | binLbin. Regresa la representacion en Lista de 0s y 1s, de un numero Binario.
 binLbin :: Binario -> [Int]
@@ -84,14 +84,32 @@ binLbin (Uno a) = binLbin a ++ [1]
 
 -- | binInt. Regresa el binario (en lista) en su representación decimal.
 binInt :: [Int] -> Int
-binInt xs = foldlk (\x y -> 2*x+ y) 0 xs
+binInt xs = foldll (\x y -> 2*x+ y) 0 xs
 
--- | foldlk. Implementación de la función foldl, predefinida en Haskell.
-foldlk :: (t -> a -> t) -> t -> [a] -> t
-foldlk _ z []     = z
-foldlk f z (x:xs) = let z' = z `f` x
-                    in foldlk f z' xs
-                       
+-- | foldl. Implementación de la función foldl, predefinida en Haskell.
+foldll :: (t -> a -> t) -> t -> [a] -> t
+foldll _ z []     = z
+foldll f z (x:xs) = let z' = z `f` x
+                    in foldll f z' xs
+
+-- | reverse' Implementación de la función reverse
+reverse' ::[a]->[a]
+reverse' = foldll (\e a -> a:e) []
+
+-- | last' Implementación de la función last
+last' ::[a]-> a
+last' []     = error "D:2y"
+last' (x:[]) = x
+last' (_:xs) = last' xs
+
+-- | init' Implementación de la función init
+init' ::[a]->[a]
+init' []      = error "D:1"
+init' [x]     = []
+init' (x:xs)  = x: init' xs
+
+
+
 {-- PUNTOS EXTRA --}
 -- |1| natABin. Recibe un natural (mayor que 1) y devuelve un Binario.
 natABin :: Int -> Binario

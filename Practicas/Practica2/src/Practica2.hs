@@ -14,22 +14,22 @@ import Data.List
 
 -- |1| Funcion fnn que recibe una formula φ y devuelve su forma normal negativa
 fnn :: Prop -> Prop
-fnn  Top  = Top
-fnn Bot   = Bot
-fnn (P x) =  (P x)
-fnn (Neg (P x))    = (Neg (P x))
-fnn (Neg x)   = fnn$ neg$elimImp$elimEquiv (Neg x)
-fnn (Or x y)  = (Or (fnn$ elimImp$elimEquiv x) (fnn$ elimImp$elimEquiv y))
-fnn (And x y) = (And (fnn$ elimImp$elimEquiv x) (fnn$ elimImp$elimEquiv y))
+fnn  Top       = Top
+fnn Bot        = Bot
+fnn (P x)      =  (P x)
+fnn (Neg (P x))= (Neg (P x))
+fnn (Neg x)    = fnn$ neg$elimImp$elimEquiv (Neg x)
+fnn (Or x y)   = (Or (fnn$ elimImp$elimEquiv x) (fnn$ elimImp$elimEquiv y))
+fnn (And x y)  = (And (fnn$ elimImp$elimEquiv x) (fnn$ elimImp$elimEquiv y))
 fnn (Impl x y) = fnn$ elimImp$elimEquiv (Impl x y)
 fnn (Syss x y) = fnn$ elimImp$elimEquiv(Syss x y)
 
 -- |2| Funcion distr la cual aplica adecuadamente las leyes distributivas a una formula proposicional
 distr :: Prop -> Prop
-distr (Or (And p q) r) = distr(And ( Or (distr p)  (distr r)) (Or (distr q) (distr r)))
-distr (Or r (And p q)) = distr(And (Or (distr r) (distr p)) (Or (distr r)  (distr q)))
-distr (And f g) = And (distr f)  (distr g)
-distr f = f
+distr (Or (And x y) z) = distr(And ( Or (distr x)  (distr z)) (Or (distr y) (distr z)))
+distr (Or z (And x y)) = distr(And (Or (distr z) (distr x)) (Or (distr z)  (distr y)))
+distr (And x y)        = And (distr x)  (distr y)
+distr x                = x
 -- |3| Funcion fnc que recibe una formula φ y devuelve su forma normal conjuntiva, es decir:
 --     Permite expresar cualquier formula proposicional como una conjunción de disyunciones.
 -- IMPORTANTE: Se puede suponer que la formula de entrada ya se encuentra en forma normal negativa
@@ -51,7 +51,7 @@ ctolist (P x)       = [(P x)]
 ctolist (Neg (P x)) = [(Neg(P x))]
 ctolist (And x y)   = union (ctolist x)  (ctolist y)
 ctolist (Or x y)    = union (ctolist x)  (ctolist y)
-ctolist (Impl x y)   = [(Impl x y)]
+ctolist (Impl x y)  = [(Impl x y)]
 ctolist (Syss x y)  = [(Syss x y)]
 
 -- |5| Función fncC recibe una fórmula en forma normal conjuntiva y debe devolver su conversión en una lista de cláusulas.
@@ -71,21 +71,30 @@ PUNTOS EXTRA
 --}
 -- |1| Función argcorrecto que verifica si un argumento con premisas y una conclusión es lógicamente correcto
 argcorrecto :: [Prop] -> Prop -> Bool
-argcorrecto xs  c= tautologia(Impl (verCor xs) c)
+argcorrecto xs x = consecuencia xs x
 
 {--
 FUNCIONES AUX
 -}
--- [1']Función que regresa una fórmula equivalente donde las negaciones solo se aplican a fórmulas atómicas.
+-- [1'] Función que regresa una fórmula equivalente donde las negaciones solo se aplican a fórmulas atómicas.
 neg :: Prop -> Prop
 neg (Neg (P x))    = (Neg (P x))
 neg (Neg (Neg x))  = elimImp$elimEquiv x
 neg (Neg(And x y)) = (Or (neg (Neg (elimImp$elimEquiv x))) (neg (Neg (elimImp$elimEquiv y))))
 neg (Neg(Or x y))  = (And (neg (Neg (elimImp$elimEquiv x))) (neg (Neg (elimImp$elimEquiv y))))
 
-verCor:: [Prop] -> Prop
-verCor (x:xs) = (And x (verCor xs))
-{--
+satisfenConj :: Estado -> [Prop]-> Bool
+satisfenConj i []     = True
+satisfenConj i (x:xs) = and ((satisfen i x):[satisfenConj i xs])
+
+estadosConj :: [Prop] -> [Estado]
+estadosConj []     =  []
+estadosConj (x:xs) =  estados x ++ estadosConj xs
+
+consecuencia gamma phi = null [i | i <- estadosConj(phi:gamma),
+                               satisfenConj i gamma,
+                               not (satisfen i phi)]
+{-
 EJEMPLOS
 -}
 

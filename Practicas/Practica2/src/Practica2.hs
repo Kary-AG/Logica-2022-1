@@ -64,8 +64,14 @@ fncC (Syss x y) = [ctolist (Syss x y)]
 
 -- |6| Funcion fncConj recibe una proposicion y devuelve el conjunto de clausulas equivalentes a esa proposicion
 fncConj :: Prop -> [Clausula]
-fncConj x = fncC$fnc$fnn x
---Falta acomodar listas c:
+fncConj (Or (P x) (P y))              = [ctolist (Or (P x) (P y))]
+fncConj (Or (Neg (P x)) (P y))        = [ctolist (Or (Neg(P x)) (P y))]
+fncConj (Or (P x) (Neg(P y)))         = [ctolist (Or (P x) (Neg(P y)))]
+fncConj (Or (Neg (P x)) (Neg (P y)))  = [ctolist (Or (Neg (P x)) (Neg (P y)))]
+fncConj (Or x y)                      = [ctolist (Or x y)]
+fncConj (And x y)                     = fncConj x ++ fncConj y
+fncConj x                             = fncConj$fnc$fnn x
+--CHECAR ESTA FUNCIÓN UN TEST ESTA MAL (PERO NO SE si es mi función o el test)
 {--
 PUNTOS EXTRA
 --}

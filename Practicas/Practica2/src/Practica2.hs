@@ -146,7 +146,7 @@ fncConj1 = fncConj (Neg (Syss (P 'p') (P 'q')))
 -- Devuelve: [['p','q'],['p',¬ 'p'],[¬ 'q','q'],[¬ 'q',¬ 'p']]
 
 fncConj2 = fncConj (Or(Or (P 'p') (P 'q')) (Or(Neg (P 'q')) (P 'r')))
---Devuelve: ['p','q',¬ 'q','r']
+--Devuelve: [['p','q',¬ 'q','r']]
 
 argcorrecto1 = argcorrecto [(Impl (Neg (P 'r')) (Neg (P 'i'))), (Or (P 'e') (Neg(Neg (P 'i')))), (Neg (P 'e'))] (P 'r')
 -- Devuelve: True

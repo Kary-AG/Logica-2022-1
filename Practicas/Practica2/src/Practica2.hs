@@ -71,7 +71,7 @@ fncConj (Or (Neg (P x)) (Neg (P y)))  = [ctolist (Or (Neg (P x)) (Neg (P y)))]
 fncConj (Or x y)                      = [ctolist (Or x y)]
 fncConj (And x y)                     = fncConj x ++ fncConj y
 fncConj x                             = fncConj$fnc$fnn x
---CHECAR ESTA FUNCIÓN UN TEST ESTA MAL (PERO NO SE si es mi función o el test)
+
 {--
 PUNTOS EXTRA
 --}

@@ -5,6 +5,12 @@
 -- | Ayudante: Javier Enríquez Mendoza
 -- | Ayudante: Ramón Arenas Ayala
 -- | Laboratorio: Daniel Lugo Cano
+--
+-- | Integrantes:
+-- | Shin Ui Chul
+-- | Azpeitia García Karyme Ivette
+-- | Sánchez Reza Neider
+-}
 -}
 
 module Practica2 where

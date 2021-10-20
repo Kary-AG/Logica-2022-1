@@ -5,7 +5,14 @@ import Data.Char
 {--Semántica formal de los conectivos lógicos--}
 
 --Tipo de datos que representan las formulas de la lógica proposicional
-data Prop = Top | Bot | P VarP | Neg Prop | Or Prop Prop | And Prop Prop | Impl Prop Prop | Syss Prop Prop deriving (Eq, Ord)
+data Prop = Top
+          | Bot
+          | P VarP
+          | Neg Prop
+          | Or Prop Prop
+          | And Prop Prop
+          | Impl Prop Prop
+          | Syss Prop Prop deriving (Eq, Ord)
 
 --Tipo para definir variables en la lógica proposicional
 type VarP = Char
@@ -13,13 +20,13 @@ type VarP = Char
 --Instancia para mostrar las formulas
 -- (And(Or (P 'p') (P 'q')) (Or(Neg (P 'q')) (P 'r'))) = (('p' v 'q') ^ (~ 'q' v 'r'))
 instance Show Prop where
-  show Top = "T"
-  show Bot = "F"
-  show (P x) = show x
-  show (Neg p) = "¬ "++show p
-  show (Or p1 p2) = "("++(show p1)++" v "++(show p2)++")"
-  show (And p1 p2) = "("++(show p1)++" ∧ "++(show p2)++")"
-  show (Impl p1 p2) = "("++(show p1)++" --> "++(show p2)++")"
+  show Top          = "T"
+  show Bot          = "F"
+  show (P x)        = show x
+  show (Neg p)      = "¬ "++show p
+  show (Or p1 p2)   = "("++(show p1)++" v "   ++(show p2)++")"
+  show (And p1 p2)  = "("++(show p1)++" ∧ "   ++(show p2)++")"
+  show (Impl p1 p2) = "("++(show p1)++" --> " ++(show p2)++")"
   show (Syss p1 p2) = "("++(show p1)++" <--> "++(show p2)++")"
 
 --Conjunto donde guardaremos el valor de verdad de las variables
@@ -31,12 +38,12 @@ type Estado = [VarP]
 -- interp ['q'] (And(Or (P 'p') (P 'q')) (Or(Neg (P 'q')) (P 'r'))) = False
 interp :: Estado -> Prop -> Bool
 interp estado prop = case prop of
-  Top -> True
-  Bot -> False
-  P var -> inter estado (P var)
-  Neg p -> not(interp estado p)
-  Or p1 p2 -> interp estado p1 || interp estado p2
-  And p1 p2 -> interp estado p1 && interp estado p2
+  Top        -> True
+  Bot        -> False
+  P var      -> inter estado (P var)
+  Neg p      -> not(interp estado p)
+  Or   p1 p2 -> interp estado p1 || interp estado p2
+  And  p1 p2 -> interp estado p1 && interp estado p2
   Impl p1 p2 -> not(interp estado p1) || (interp estado p2)
   Syss p1 p2 -> (not(interp estado p1) || (interp estado p2)) && (not(interp estado p2) || (interp estado p1))
 
@@ -139,7 +146,7 @@ elimEquiv (Neg prop) = Neg (elimEquiv prop)
 elimEquiv (Or prop1 prop2) = Or (elimEquiv prop1) (elimEquiv prop2)
 elimEquiv (And prop1 prop2) = And (elimEquiv prop1) (elimEquiv prop2)
 elimEquiv (Impl prop1 prop2) = Impl (elimEquiv prop1) (elimEquiv prop2)
-elimEquiv (Syss prop1 prop2) = And (Impl (elimEquiv prop1) (elimEquiv prop2)) (Impl (elimEquiv prop2) (elimEquiv prop2))
+elimEquiv (Syss prop1 prop2) = And (Impl (elimEquiv prop1) (elimEquiv prop2)) (Impl (elimEquiv prop2) (elimEquiv prop1))
 
 
 --Dada una prop elñimina las implicaciones

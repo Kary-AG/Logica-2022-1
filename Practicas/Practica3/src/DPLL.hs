@@ -14,58 +14,60 @@ type Configuracion = (Modelo,Formula)
 
 unit :: Configuracion -> Configuracion
 unit (a,[])  =  (a,[])
-unit (a, xs) = (head(unitM xs) , delete (head(unitM xs)) xs )
+unit ([], xs)= (head$unitM xs, (delete (head$unitM$ xs) xs))
+unit (a, xs) = ((head a):(head$unitM$ xs) , delete(head$unitM xs) xs )
 
 elim :: Configuracion -> Configuracion
 elim ([], f) = ([],f)
 elim (x, []) = (x,[])
 elim (x,f)   = (x, fil(x,f))
-  where fil (_,[])   = []
-        fil(x,xs)    = if notElem (head x) (head xs)
-          then (head xs): fil (x,tail xs)
-          else fil (x,tail xs)
+  where fil (_,[])                     = []
+        fil(x,xs)
+          | notElem (head x) (head xs) = (head xs): fil (x,tail xs)
+          | otherwise                  = fil (x,tail xs)
 
 red :: Configuracion -> Configuracion
 red ([], f) = ([],f)
 red (m, []) = (m,[])
 red (m,f)   = (m,red2 (m,f))
-
-red2 (x, []) = []
-red2 (x, xs) = if notElem (Neg (head x)) (head xs)
-  then head xs: red2 (x,tail xs)
-  else delete (Neg (head x))(head xs): red2 (x, tail xs)
+  where red2 (x, [])                         = []
+        red2 (x, xs)
+         | notElem  (Neg (head x)) (head xs) = head xs: red2 (x,tail xs)
+         | otherwise                         = delete (Neg (head x))(head xs): red2 (x, tail xs)
 
 split :: Configuracion -> [Configuracion]
 split (m,[]) = [(m,[])]
-split (_,f)  = [([negP(head(head f))], f), ([(head(head(f)))],f)]
+split (_,f)  = [([negP$head(head f)], f), ([(head$head(f))],f)]
 
 conflict :: Configuracion -> Bool
 conflict (m,f) = elem [] f
 
 success :: Configuracion -> Bool
-success (m,f) = notElem [] f
+success (m,f) = f==[]
 
 ----------------------------------------------- ARBOLES DPLL -------------------------------------
 
 rcu :: Formula -> Formula
 rcu [] = []
 rcu f  = rcuU (head(head(unitM f))) (delete (head(unitM f)) f)
-  where rcuU x [] = []
-        rcuU x xs = if elem x (head xs)|| elem (negP x) (head xs)
-          then delete' x (head xs): rcuU x (tail xs)
-          else head xs: rcuU x (tail xs)
+  where rcuU x []                                      = []
+        rcuU x xs
+          | elem x (head xs) || elem (negP x) (head xs) = (delete' x (head xs)): (rcuU x (tail xs))
+          | otherwise                                   = (head xs): (rcuU x (tail xs))
 
 rlp :: Formula -> Formula
-rlp [] = []
-rlp f  = rlpP (head (dN(allP f))) f
-  where rlpP x []  = []
-        rlpP x f = if elem x (head f)
-          then rlpP x (tail f)
-          else head f: rlpP x (tail f)
+rlp []  = []
+rlp f   = rlpP (head(dD$dN$(allP f))) f
+  where rlpP x []           = []
+        rlpP x f
+          | elem x (head f) = rlpP x (tail f)
+          | otherwise       = head f: rlpP x (tail f)
 
-rd :: Formula -> (Formula,Formula)
-rd [] = ([], [])
---rd f  = (rama (dD f) f, rama (dD f) f )
+rd :: Formula ->(Formula,Formula)
+rd [] = ([],[])
+rd f  = ((rama' (head(dL$allP f)) (rama(head(dL$allP f))  f),
+          (rama' (negP(head(dL$allPP f)))) (rama(negP(head(dL$allPP f))) f)) )
+
 data ArbolDPLL = 
                  Void
                | Uni Formula ArbolDPLL
@@ -73,11 +75,15 @@ data ArbolDPLL =
                deriving (Eq, Show)
 
 dplltree :: Formula -> ArbolDPLL
-dplltree _ = error "Implementar :)"
+dplltree [] = Void
+dplltree f  = Uni (rcu f) (Bi (rlp (rcu f)) (dplltree (fst (rd (rlp (rcu f)))))
+                           (dplltree(snd (rd(rlp (rcu f))))))
+
 
 --------------------------------------FUNCIONES AUX-------------------------------------------------
 
 -- Función que regresa la lista de los elementos que tengan longitud 1
+unitM [] = []
 unitM xs = filter ((==1). length) xs
 
 -- Función que regresa la negación
@@ -89,25 +95,43 @@ negP (Neg (P x)) = (P x)
 delete' x [] = []
 delete' x xs = delete x(delete (negP x) xs)
 
---Función regresa todas las literales de las clausulas en la fórmula
+--Función regresa todas las literales de las clausulas de la fórmula en una sola clausula
 allP:: Formula -> Clausula
 allP [] = []
-allP xs = dD (head xs ++ allP (tail xs))
-  where dD []     = []
-        dD (x:xs) = dN (x: dD (filter (/=x) xs))
+allP xs = (head xs ++ allP (tail xs))
+
+--
+rama ::Prop-> Formula ->Formula
+rama x []           = []
+rama p f
+  | elem p (head f) = rama p  (tail f)
+  |otherwise        = (head f) : (rama p (tail f))
+
+rama':: Prop-> Formula->Formula
+rama' x []                 = []
+rama' x f
+  | elem (negP x) (head f) = (delete (negP x) (head f)): rama' x (tail f)
+  | otherwise              = head f: (rama' x (tail f))
+
+allPP:: Formula -> Clausula
+allPP [] = []
+allPP xs = (head xs ++ allPP (tail xs))
+
+dD []     = []
+dD (x:xs) = (x:  (filter (/=x) xs))
 
 -- Función regresa la clausua con la literal pura
-dN [] = []
-dN [x]    = [x]
-dN (x:xs) = if elem (negP x) xs
-        then dN (delete' x xs)
-        else x:dN (tail xs)
+dN []                = []
+dN [x]               = [x]
+dN (x:xs)
+  | elem (negP x) xs = dN (delete' x xs)
+  | otherwise        =x:dN (tail xs)
 -- Función que regresa la clausula que tiene comp
-dD []  = []
-dD [x] = [x]
-dD (x:xs) = if elem (negP x) xs
-  then [x]
-  else dD (tail xs)
+dL []                 = []
+dL [x]                = [x]
+dL (x:xs)
+  | elem (negP x) xs  = x: dL xs
+  |otherwise          = dL (tail xs)
 
 ---------------------------------------PRUEBAS------------------------------------------------------
 
@@ -127,4 +151,5 @@ rcu1 = rcu [[P 'p', P 'q',Neg (P 'r')],[P 'p', Neg(P 'q')], [Neg (P 'p')], [P 'r
 --R: [['q',¬ 'r'],[¬ 'q'],['r']]
 rlp1 = rlp [[P 'p', P 'q'],[P 'q', P 'r'], [Neg(P 'q'), P 'p'], [P 'r', Neg (P 'q')]]
 -- R: [['q','r'],['r',¬ 'q']]
-rd1 = (allP [[Neg (P 'q'), P 'r'], [Neg(P 'r'), P 'q'], [Neg (P 'q'), Neg (P 'r')]])
+rd1 = ([[Neg (P 'q'), P 'r'], [Neg(P 'r'), P 'q'], [Neg (P 'q'), Neg (P 'r')]])
+--([[¬ 'r']],[['r'],[¬ 'r']])
